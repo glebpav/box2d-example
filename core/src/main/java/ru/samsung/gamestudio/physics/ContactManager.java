@@ -1,4 +1,4 @@
-package ru.samsung.gamestudio;
+package ru.samsung.gamestudio.physics;
 
 import com.badlogic.gdx.physics.box2d.*;
 import ru.samsung.gamestudio.component.Hittable;

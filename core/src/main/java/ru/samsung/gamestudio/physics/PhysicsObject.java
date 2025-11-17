@@ -1,4 +1,4 @@
-package ru.samsung.gamestudio.component;
+package ru.samsung.gamestudio.physics;
 
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;

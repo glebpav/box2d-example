@@ -1,59 +1,64 @@
 package ru.samsung.gamestudio.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
+import ru.samsung.gamestudio.physics.MapManager;
 import ru.samsung.gamestudio.MyGame;
-import ru.samsung.gamestudio.component.PhysicImage;
-import ru.samsung.gamestudio.component.PhysicsObject;
+import ru.samsung.gamestudio.component.Player;
+import ru.samsung.gamestudio.physics.WorldManager;
 
 import static ru.samsung.gamestudio.GameSettings.SCALE;
 
 public class GameScreen extends ScreenAdapter {
 
-    PhysicImage fallingComponent;
-    PhysicImage groundComponent;
-
     MyGame game;
+    WorldManager worldManager;
 
     public GameScreen(MyGame game) {
-
         this.game = game;
+        worldManager = new WorldManager();
+    }
 
-        fallingComponent = new PhysicImage(new Texture("falling.png"), 60, 60);
-        fallingComponent.setPhysicsObject(
-            new PhysicsObject.PhysicalObjectBuilder(game.world, BodyDef.BodyType.DynamicBody)
-                .addCircularFixture(30f, (short) 1)
-                .setInitialPosition(600, 600)
-                .build(fallingComponent)
-        );
-
-        groundComponent = new PhysicImage(new Texture("ground.png"), 1000, 40);
-        groundComponent.setPhysicsObject(
-            new PhysicsObject.PhysicalObjectBuilder(game.world, BodyDef.BodyType.StaticBody)
-                .addRectangularFixture(1000f, 40f, (short) 2)
-                .setInitialPosition(600f, 100)
-                .build(groundComponent)
-        );
-
+    public void handleInput() {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            worldManager.player.moveLeft();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            worldManager.player.moveRight();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            worldManager.player.moveUp();
+        }
     }
 
     @Override
     public void render(float delta) {
 
-        game.stepWorld();
+        handleInput();
 
+        worldManager.stepWorld();
+
+        game.camera.position.x = worldManager.player.physicsObject.getX();
+        game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
 
         ScreenUtils.clear(Color.CLEAR);
         game.batch.begin();
-        groundComponent.draw(game.batch);
-        fallingComponent.draw(game.batch);
+
+        worldManager.player.draw(game.batch);
         game.batch.end();
 
-        game.debugRenderer.render(game.world, game.camera.combined.cpy().scl(1 / SCALE));
+        worldManager.mapRenderer.setView(game.camera);
+        worldManager.mapRenderer.render();
+
+        game.debugRenderer.render(worldManager.world, game.camera.combined.cpy().scl(1 / SCALE));
     }
 
     @Override
