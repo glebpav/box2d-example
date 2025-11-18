@@ -4,14 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
-import ru.samsung.gamestudio.physics.MapManager;
 import ru.samsung.gamestudio.MyGame;
-import ru.samsung.gamestudio.component.Player;
 import ru.samsung.gamestudio.physics.WorldManager;
 
 import static ru.samsung.gamestudio.GameSettings.SCALE;

@@ -58,7 +58,13 @@ public class WorldManager {
             Rectangle rect = object.getRectangle();
 
             if (object.getName().equals("player")) {
-                player = new Player(new Texture("falling.png"), (int) rect.width, (int) rect.height, world);
+                player = new Player(
+                    new Texture("falling.png"),
+                    (int) (rect.width * tileScale) * 2,
+                    (int) (rect.height * tileScale) * 2,
+                    world,
+                    tileScale
+                );
             }
         }
         /*
