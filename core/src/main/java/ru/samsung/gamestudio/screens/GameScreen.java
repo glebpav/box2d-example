@@ -6,18 +6,22 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 import ru.samsung.gamestudio.MyGame;
+import ru.samsung.gamestudio.component.BlackoutComponent;
+import ru.samsung.gamestudio.component.LightComponent;
 import ru.samsung.gamestudio.physics.WorldManager;
-
-import static ru.samsung.gamestudio.GameSettings.SCALE;
 
 public class GameScreen extends ScreenAdapter {
 
     MyGame game;
     WorldManager worldManager;
+    LightComponent lightComponent;
+    BlackoutComponent blackoutComponent;
 
     public GameScreen(MyGame game) {
         this.game = game;
         worldManager = new WorldManager();
+        lightComponent = new LightComponent();
+        blackoutComponent = new BlackoutComponent();
     }
 
     public void handleInput() {
@@ -44,15 +48,26 @@ public class GameScreen extends ScreenAdapter {
         game.batch.setProjectionMatrix(game.camera.combined);
 
         ScreenUtils.clear(Color.CLEAR);
-        game.batch.begin();
-
-        worldManager.player.draw(game.batch);
-        game.batch.end();
 
         worldManager.mapRenderer.setView(game.camera);
         worldManager.mapRenderer.render();
 
-        game.debugRenderer.render(worldManager.world, game.camera.combined.cpy().scl(1 / SCALE));
+        game.batch.begin();
+
+        worldManager.player.draw(game.batch);
+        /*lightComponent.draw(
+            game.batch,
+            worldManager.player.physicsObject.getX(),
+            worldManager.player.physicsObject.getY()
+        );*/
+        blackoutComponent.draw(
+            game.batch,
+            worldManager.player.physicsObject.getX()
+        );
+        game.batch.end();
+
+
+        // game.debugRenderer.render(worldManager.world, game.camera.combined.cpy().scl(1 / SCALE));
     }
 
     @Override
