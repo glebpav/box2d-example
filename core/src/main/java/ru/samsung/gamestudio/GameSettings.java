@@ -10,4 +10,7 @@ public class GameSettings {
     public static final int POSITION_ITERATIONS = 6;
     public static final float SCALE = 0.014f;
 
+    public static final int ENEMY_WALK_LENGTH = 200;
+    public static final int COUNT_OF_LIVES = 3;
+
 }

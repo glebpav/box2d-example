@@ -11,17 +11,22 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import ru.samsung.gamestudio.physics.PhysicsObject;
 
-public class Player extends ImageView implements Hittable {
+import static ru.samsung.gamestudio.GameSettings.COUNT_OF_LIVES;
 
-    enum State {IDLE, RUNNING}
+public class Player extends ImageView {
+
+    enum State {IDLE, RUNNING, ATTACHING}
 
     private Animation<TextureRegion> idelAnimation;
     private Animation<TextureRegion> runAnimation;
     private State state;
 
+    private int countOfLives;
+
     public PhysicsObject physicsObject;
     long animationStartTime;
     boolean shouldFlip = false;
+    private boolean isTouchingFlor;
 
     public Player(Texture texture, int width, int height, World world, float tileScale) {
         super(texture, width, height);
@@ -33,12 +38,16 @@ public class Player extends ImageView implements Hittable {
         createAnimation();
         animationStartTime = System.currentTimeMillis();
         state = State.IDLE;
+        isTouchingFlor = true;
+
+        countOfLives = COUNT_OF_LIVES;
 
     }
 
     private void createAnimation() {
 
         Texture texture = new Texture("textures/player/player_tileset.png");
+
         Array<TextureRegion> frames = new Array<>();
 
         for (int i = 0; i < 6; i++) {
@@ -74,9 +83,15 @@ public class Player extends ImageView implements Hittable {
     }
 
     public void moveUp() {
+        if (isTouchingFlor == false) {
+            return;
+        }
+
         physicsObject.getBody().setLinearVelocity(new Vector2(
-            physicsObject.getBody().getLinearVelocity().x, 10)
+            physicsObject.getBody().getLinearVelocity().x, 5)
         );
+
+        isTouchingFlor = false;
     }
 
     @Override
@@ -105,8 +120,15 @@ public class Player extends ImageView implements Hittable {
         physicsObject.dispose();
     }
 
-    @Override
-    public void onHit() {
-        System.out.println("From on hit in PhysicImage");
+    public void onTouchFlour() {
+        System.out.println("Player has touched flor");
+        isTouchingFlor = true;
+    }
+
+    public void onTouchEnemy() {
+        if (state != State.ATTACHING) {
+            countOfLives -= 1;
+            System.out.println("Left count of lives: " + countOfLives);
+        }
     }
 }

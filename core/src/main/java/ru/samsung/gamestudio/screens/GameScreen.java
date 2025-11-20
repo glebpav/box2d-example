@@ -10,6 +10,8 @@ import ru.samsung.gamestudio.component.BlackoutComponent;
 import ru.samsung.gamestudio.component.LightComponent;
 import ru.samsung.gamestudio.physics.WorldManager;
 
+import static ru.samsung.gamestudio.GameSettings.SCALE;
+
 public class GameScreen extends ScreenAdapter {
 
     MyGame game;
@@ -55,19 +57,24 @@ public class GameScreen extends ScreenAdapter {
         game.batch.begin();
 
         worldManager.player.draw(game.batch);
+
+        for (int i = 0; i < worldManager.enemyList.size(); i++) {
+            worldManager.enemyList.get(i).draw(game.batch);
+        }
+
         /*lightComponent.draw(
             game.batch,
             worldManager.player.physicsObject.getX(),
             worldManager.player.physicsObject.getY()
         );*/
-        blackoutComponent.draw(
+        /*blackoutComponent.draw(
             game.batch,
             worldManager.player.physicsObject.getX()
-        );
+        );*/
         game.batch.end();
 
 
-        // game.debugRenderer.render(worldManager.world, game.camera.combined.cpy().scl(1 / SCALE));
+        game.debugRenderer.render(worldManager.world, game.camera.combined.cpy().scl(1 / SCALE));
     }
 
     @Override

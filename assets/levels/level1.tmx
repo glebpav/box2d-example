@@ -24,5 +24,6 @@
  </objectgroup>
  <objectgroup id="5" name="Actors">
   <object id="13" name="player" x="224" y="96" width="32" height="32"/>
+  <object id="13" name="enemy" x="400" y="120" width="32" height="32"/>
  </objectgroup>
 </map>

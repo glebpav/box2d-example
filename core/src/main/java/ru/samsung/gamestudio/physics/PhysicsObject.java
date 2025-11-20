@@ -22,6 +22,13 @@ public class PhysicsObject implements Disposable {
         }
     }
 
+    public void destroy() {
+        for (Fixture fixture : this.fixturesList) {
+            body.destroyFixture(fixture);
+        }
+        fixturesList.clear();
+    }
+
     public int getX() {
         return (int) (body.getPosition().x / SCALE);
     }

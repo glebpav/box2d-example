@@ -7,8 +7,12 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import ru.samsung.gamestudio.component.Enemy;
 import ru.samsung.gamestudio.component.Player;
 import ru.samsung.gamestudio.component.StaticBlock;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static ru.samsung.gamestudio.GameSettings.*;
 
@@ -18,6 +22,7 @@ public class WorldManager {
     public World world;
 
     public Player player;
+    public List<Enemy> enemyList;
 
     float accumulator;
 
@@ -25,6 +30,8 @@ public class WorldManager {
 
         world = new World(new Vector2(0, -10), true);
         world.setContactListener(new ContactManager());
+
+        enemyList = new ArrayList<>();
 
         MapManager mapManager = new MapManager("levels/level1.tmx");
         mapRenderer = new OrthoCachedTiledMapRenderer(mapManager.getMap(), mapManager.getTileScale());
@@ -60,10 +67,21 @@ public class WorldManager {
             if (object.getName().equals("player")) {
                 player = new Player(
                     new Texture("falling.png"),
-                    (int) (rect.width * tileScale) * 2,
-                    (int) (rect.height * tileScale) * 2,
+                    90,
+                    96,
                     world,
                     tileScale
+                );
+            }
+            if (object.getName().equals("enemy")) {
+                enemyList.add(
+                    new Enemy(
+                        rect.width * tileScale,
+                        rect.height * tileScale,
+                        rect.x * tileScale,
+                        rect.y * tileScale,
+                        world
+                    )
                 );
             }
         }
